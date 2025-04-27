@@ -17,6 +17,7 @@ SOURCES += \
     registerdialog.cpp \
     scandre.cpp \
     student.cpp \
+    tableview.cpp \
     viewcourses.cpp \
     viewregistrations.cpp \
     viewstudents.cpp
@@ -29,6 +30,7 @@ HEADERS += \
     registerdialog.h \
     scandre.h \
     student.h \
+    tableview.h \
     viewcourses.h \
     viewregistrations.h \
     viewstudents.h
@@ -38,6 +40,7 @@ FORMS += \
     mainwindow.ui \
     registerdialog.ui \
     scandre.ui \
+    tableview.ui \
     viewcourses.ui \
     viewregistrations.ui \
     viewstudents.ui

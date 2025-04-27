@@ -15,6 +15,9 @@ public:
     explicit ScAndRe(QWidget *parent = nullptr);
     ~ScAndRe();
 
+private slots:
+    void on_genreco_clicked();
+
 private:
     Ui::ScAndRe *ui;
 };

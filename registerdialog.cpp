@@ -17,12 +17,10 @@ void loadCsvToComboBox(const QString& filePath, QComboBox* comboBox) {
 
     QTextStream in(&file);
 
-    // Skip the header line
     if (!in.atEnd()) {
         in.readLine();
     }
 
-    // Now read the actual data
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList fields = line.split(',');
@@ -101,15 +99,62 @@ void registerDialog::on_registerButton_clicked()
     string sid = getIdFromName("/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/students.csv", ui->studentcombo->currentText().toStdString());
     grade ng = grade(0, 0, 0, sid, courseid);
     QString gradesFile = "/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/grades.csv";
+    QString coursesFile = "/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/courses.csv";
 
+    // First, get the new course's Day and Time
+    QString newCourseDay, newCourseTime;
+    {
+        QFile courseFile(coursesFile);
+        if (!courseFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            ui->resultlabel->setText("Error: Cannot open courses file.");
+            return;
+        }
+        QTextStream courseIn(&courseFile);
+
+        QStringList courseHeaders = courseIn.readLine().split(',');
+        int idIndex = -1, dayIndex = -1, timeIndex = -1;
+        for (int i = 0; i < courseHeaders.size(); ++i) {
+            QString header = courseHeaders[i].trimmed().toLower();
+            if (header.contains("id")) idIndex = i;
+            if (header.contains("day")) dayIndex = i;
+            if (header.contains("time")) timeIndex = i;
+        }
+
+        if (idIndex == -1 || dayIndex == -1 || timeIndex == -1) {
+            ui->resultlabel->setText("Error: Missing fields in courses file.");
+            return;
+        }
+
+        while (!courseIn.atEnd()) {
+            QString line = courseIn.readLine();
+            QStringList fields = line.split(',');
+            if (fields.size() > qMax(qMax(idIndex, dayIndex), timeIndex)) {
+                if (fields[idIndex].trimmed() == QString::fromStdString(courseid)) {
+                    newCourseDay = fields[dayIndex].trimmed();
+                    newCourseTime = fields[timeIndex].trimmed();
+                    break;
+                }
+            }
+        }
+        courseFile.close();
+    }
+
+    if (newCourseDay.isEmpty() || newCourseTime.isEmpty()) {
+        ui->resultlabel->setText("Error: Course schedule not found.");
+        return;
+    }
+
+    // Now, verify grades
     QFile file(gradesFile);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return;
+        ui->resultlabel->setText("Error: Cannot open grades file.");
+        //return;
     }
 
     QTextStream in(&file);
     int sameStudentCount = 0;
     bool recordExists = false;
+    bool scheduleConflict = false;
 
     while (!in.atEnd()) {
         QString line = in.readLine();
@@ -128,20 +173,56 @@ void registerDialog::on_registerButton_clicked()
                 recordExists = true;
                 break;
             }
+
+            // Check schedule conflict
+            // Lookup this existing course's day and time
+            QFile courseFile(coursesFile);
+            if (courseFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                QTextStream courseIn(&courseFile);
+                QStringList courseHeaders = courseIn.readLine().split(',');
+                int idIndex = -1, dayIndex = -1, timeIndex = -1;
+                for (int i = 0; i < courseHeaders.size(); ++i) {
+                    QString header = courseHeaders[i].trimmed().toLower();
+                    if (header.contains("id")) idIndex = i;
+                    if (header.contains("day")) dayIndex = i;
+                    if (header.contains("time")) timeIndex = i;
+                }
+
+                while (!courseIn.atEnd()) {
+                    QString courseLine = courseIn.readLine();
+                    QStringList courseFields = courseLine.split(',');
+                    if (courseFields.size() > qMax(qMax(idIndex, dayIndex), timeIndex)) {
+                        if (courseFields[idIndex].trimmed() == existingCourse) {
+                            QString existingDay = courseFields[dayIndex].trimmed();
+                            QString existingTime = courseFields[timeIndex].trimmed();
+
+                            if (existingDay == newCourseDay && existingTime == newCourseTime) {
+                                scheduleConflict = true;
+                            }
+                            break;
+                        }
+                    }
+                }
+                courseFile.close();
+            }
         }
     }
     file.close();
 
     if (recordExists) {
-        ui->resultlabel->setText("Registration Failed. This student is already registered for this course.");
-
+        ui->resultlabel->setText("Registration Failed: Already registered for this course.");
         return;
     }
     if (sameStudentCount >= 3) {
-        ui->resultlabel->setText("Registration Failed. A student cannot register for more than 3 courses.");
+        ui->resultlabel->setText("Registration Failed: A student cannot register for more than 3 courses.");
+        return;
+    }
+    if (scheduleConflict) {
+        ui->resultlabel->setText("Registration Failed: Schedule conflict with another registered course.");
         return;
     }
 
+    // If all checks passed, register
     QStringList newRow;
     newRow << QString::fromStdString(ng.getStudent())
            << QString::fromStdString(ng.getCourse())
@@ -153,7 +234,7 @@ void registerDialog::on_registerButton_clicked()
     ui->resultlabel->setText("SUCCESS!");
 
     this->hide();
-
 }
+
 
 

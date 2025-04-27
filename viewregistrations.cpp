@@ -67,34 +67,35 @@ void baloadCsvToTableView(const QString& filePath, QTableView* tableView, string
                 if(fields[1].toStdString()==val){
                     QList<QStandardItem*> items;
                     for (const QString& field : fields) {
-                        items.append(new QStandardItem(field));
-                    }
-                    items.append(new QStandardItem (QString::fromStdString(to_string(fields[2].toDouble()+fields[3].toDouble()+fields[4].toDouble()))));
-                    model->appendRow(items);
+                        if(field.toDouble()){
+
+                            QString total =  QString::number(field.toDouble(), 'f', 2);
+                            items.append(new QStandardItem(total));
+                        } else {
+                            items.append(new QStandardItem(field));
+
+                        }                    }
+                    QString total =  QString::number(fields[2].toDouble()+fields[3].toDouble()+fields[4].toDouble(), 'f', 2);
+                    items.append(new QStandardItem (total));                    model->appendRow(items);
                 }
             } else {
                 if(fields[0].toStdString()==val){
                     QList<QStandardItem*> items;
                     for (const QString& field : fields) {
-                        // if(field.startsWith("S")){
-                        //     items.append(new QStandardItem( QString::fromStdString( (student::getById(field.toStdString()).getName() )  ) ));
-                        //     continue;
+                        if(field.toDouble()){
 
-                        // }
-                        // if (field.startsWith("C")){
-                        //     items.append(new QStandardItem( QString::fromStdString( (course::getById(field.toStdString()).getName() )  ) ));
-                        //     continue;
-                        // }
-                        items.append(new QStandardItem(field));
+                            QString total =  QString::number(field.toDouble(), 'f', 2);
+                            items.append(new QStandardItem(total));
+                        } else {
+                            items.append(new QStandardItem(field));
+
+                        }
+
                     }
-                    // items.append(new QStandardItem( QString::fromStdString( (student::getById(fields[1].toStdString()).getName() )  ) ));
-                    // items.append(new QStandardItem( QString::fromStdString( (course::getById(fields[0].toStdString()).getName() )  ) ));
-                    // items.append(new QStandardItem(  fields[2] ));
-                    // items.append(new QStandardItem(  fields[3] ));
-                    // items.append(new QStandardItem(  fields[4] ));
 
 
-                    items.append(new QStandardItem (QString::fromStdString(to_string(fields[2].toDouble()+fields[3].toDouble()+fields[4].toDouble()))));
+                    QString total =  QString::number(fields[2].toDouble()+fields[3].toDouble()+fields[4].toDouble(), 'f', 2);
+                    items.append(new QStandardItem (total));
                     model->appendRow(items);
                 }
             }
