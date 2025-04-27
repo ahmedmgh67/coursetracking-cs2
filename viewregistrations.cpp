@@ -51,27 +51,36 @@ void baloadCsvToTableView(const QString& filePath, QTableView* tableView, string
     QStandardItemModel* model = new QStandardItemModel(tableView); // Parent is tableView
     QTextStream in(&file);
 
-    bool isFirstLine = true;
+    bool isFirstLine = false;
 
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList fields = line.split(',');
 
         if (isFirstLine) {
-            // Set headers from first line
             model->setHorizontalHeaderLabels(fields);
             isFirstLine = false;
         } else {
-            cout <<endl << (fields[1].toStdString() == val)<< endl;
-            cout <<endl << (fields[1].toStdString()) << (val)<< endl;
-            if(fields[1].toStdString()==val){
-                cout<<endl<<"MATCH FOUND"<<endl;
-                QList<QStandardItem*> items;
-                for (const QString& field : fields) {
-                    items.append(new QStandardItem(field));
+            if(QString::fromStdString(val).startsWith("C")){
+                if(fields[1].toStdString()==val){
+                    QList<QStandardItem*> items;
+                    for (const QString& field : fields) {
+                        items.append(new QStandardItem(field));
+                    }
+                    items.append(new QStandardItem (QString::fromStdString(to_string(fields[2].toDouble()+fields[3].toDouble()+fields[4].toDouble()))));
+                    model->appendRow(items);
                 }
-                model->appendRow(items);
+            } else {
+                if(fields[0].toStdString()==val){
+                    QList<QStandardItem*> items;
+                    for (const QString& field : fields) {
+                        items.append(new QStandardItem(field));
+                    }
+                    items.append(new QStandardItem (QString::fromStdString(to_string(fields[2].toDouble()+fields[3].toDouble()+fields[4].toDouble()))));
+                    model->appendRow(items);
+                }
             }
+
 
         }
     }
@@ -104,3 +113,20 @@ ViewRegistrations::~ViewRegistrations()
 {
     delete ui;
 }
+
+void ViewRegistrations::on_table_clicked(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+
+    int row = index.row();
+
+    // Example: Print the first column value of the clicked row
+    QString sid = index.model()->index(row, 0).data().toString();
+    QString cid = index.model()->index(row, 1).data().toString();
+
+    edw = new EditGrades(nullptr, sid, cid);
+    edw->show();
+
+}
+

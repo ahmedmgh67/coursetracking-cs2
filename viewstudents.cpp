@@ -60,42 +60,6 @@ ViewStudents::ViewStudents(QWidget *parent)
     loadCsvToTableView("/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/students.csv", ui->tableView);
 
 
-    // listView = new QListView(ui->listView);
-    // model = new QStringListModel(this);
-
-    // QStringList list;
-
-
-    // QFile file("/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/students.csv");
-    // if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-    //     qWarning("Could not open file");
-    //     return;
-    // }
-
-    // QTextStream in(&file);
-
-    // // Skip the header line
-    // if (!in.atEnd()) {
-    //     in.readLine();
-    // }
-
-    // // Now read the actual data
-    // while (!in.atEnd()) {
-    //     QString line = in.readLine();
-    //     QStringList fields = line.split(',');
-    //     if (!fields.isEmpty()) {
-    //         list << fields[0] + " - "+fields[1];
-    //     }
-    // }
-
-    // file.close();
-
-
-
-    // model->setStringList(list);
-
-    // listView->setModel(model);
-
 
 
 }
@@ -104,3 +68,26 @@ ViewStudents::~ViewStudents()
 {
     delete ui;
 }
+
+void ViewStudents::goToRegistrations(string row){
+    vrw = new ViewRegistrations(nullptr, row);
+    vrw->show();
+
+}
+
+void ViewStudents::on_tableView_clicked(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+
+    int row = index.row();
+
+    // Example: Print the first column value of the clicked row
+    QString value = index.model()->index(row, 0).data().toString();
+    qDebug() << "Clicked row:" << row << "Value:" << value<<"Data     "<< index.data();
+
+    // Call your custom function
+
+    goToRegistrations((index.model()->index(row, 1).data().toString()).toStdString());
+}
+

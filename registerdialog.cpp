@@ -91,7 +91,7 @@ bool bappendRowToCsv(const QString& filePath, const QStringList& rowData) {
     QString line = rowData.join(',');
 
     // Append a newline and the data
-    out << "\n" << line;
+    out  << line<<"\n";
 
     file.close();
     return true;

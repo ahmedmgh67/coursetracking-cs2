@@ -16,10 +16,10 @@
   <widget class="QTableView" name="sc">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>30</y>
-     <width>801</width>
-     <height>561</height>
+     <x>100</x>
+     <y>50</y>
+     <width>611</width>
+     <height>321</height>
     </rect>
    </property>
   </widget>

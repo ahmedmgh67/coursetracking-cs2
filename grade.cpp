@@ -40,13 +40,3 @@ bool appendRowToCsv(const QString& filePath, const QStringList& rowData) {
     file.close();
     return true;
 }
-
-
-bool grade::registerSToC(grade g){
-    QStringList newRow;
-    newRow << "Value1" << "Value2" << "Value3";
-
-    if (!appendRowToCsv("path/to/your/file.csv", newRow)) {
-        qWarning("Failed to append row to CSV");
-    }
-}

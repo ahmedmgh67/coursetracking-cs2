@@ -35,7 +35,6 @@ public:
 
     string getCourse();
 
-    bool registerSToC(grade);
 };
 
 #endif // GRADE_H

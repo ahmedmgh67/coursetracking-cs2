@@ -9,10 +9,11 @@ private:
     string id;
 
 public:
-    student(string, string);
+    student(string="", string="");
     string getName();
 
     string getID();
+    student getById(string name);
 };
 
 #endif // STUDENT_H

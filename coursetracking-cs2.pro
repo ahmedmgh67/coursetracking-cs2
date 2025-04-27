@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     course.cpp \
+    editgrades.cpp \
     grade.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
 
 HEADERS += \
     course.h \
+    editgrades.h \
     grade.h \
     mainwindow.h \
     registerdialog.h \
@@ -32,6 +34,7 @@ HEADERS += \
     viewstudents.h
 
 FORMS += \
+    editgrades.ui \
     mainwindow.ui \
     registerdialog.ui \
     scandre.ui \
