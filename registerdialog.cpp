@@ -27,7 +27,7 @@ void loadCsvToComboBox(const QString& filePath, QComboBox* comboBox) {
         QString line = in.readLine();
         QStringList fields = line.split(',');
         if (!fields.isEmpty()) {
-            comboBox->addItem(fields[0]); // adjust index based on needed column
+            comboBox->addItem(fields[0], QVariant(fields[1])); // adjust index based on needed column
         }
     }
 

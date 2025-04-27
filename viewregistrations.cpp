@@ -12,6 +12,33 @@
 #include<cstring>
 using namespace  std;
 
+string agetIdFromName(const QString& filePath, string name) {
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning("Could not open file");
+        return "FAIL";
+    }
+
+    QTextStream in(&file);
+
+    // Skip the header line
+    if (!in.atEnd()) {
+        in.readLine();
+    }
+
+    // Now read the actual data
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList fields = line.split(',');
+        if (!fields.isEmpty()) {
+            if(fields[0]==name){
+                return fields[1].toStdString();
+            }
+        }
+    }
+
+    file.close();
+}
 
 
 void baloadCsvToTableView(const QString& filePath, QTableView* tableView, string val) {

@@ -11,7 +11,7 @@ private:
     string startTime;
     string day;
 public:
-    course(string, string, string, string);
+    course(string = "", string ="", string="", string="");
     string getName();
 
     string getID();
@@ -19,6 +19,7 @@ public:
     string getStartTime();
 
     string getDay();
+    course getById(string);
 };
 
 #endif // COURSE_H

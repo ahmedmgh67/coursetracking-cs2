@@ -78,11 +78,11 @@ void ViewCourses::onRowClicked(const QModelIndex& index) {
 
     // Example: Print the first column value of the clicked row
     QString value = index.model()->index(row, 0).data().toString();
-    qDebug() << "Clicked row:" << row << "Value:" << value;
+    qDebug() << "Clicked row:" << row << "Value:" << value<<"Data     "<< index.data();
 
     // Call your custom function
 
-    goToRegistrations(value.toStdString());
+    goToRegistrations((index.model()->index(row, 1).data().toString()).toStdString());
 }
 
 ViewCourses::~ViewCourses()
