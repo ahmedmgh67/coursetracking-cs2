@@ -101,11 +101,68 @@ void registerDialog::on_registerButton_clicked()
 {
     string courseid = getIdFromName("/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/courses.csv", ui->coursecombo->currentText().toStdString());
     string sid = getIdFromName("/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/students.csv", ui->studentcombo->currentText().toStdString());
-    grade ng = grade(0,0,0,sid, courseid);
-    this->hide();
-    //QMessageBox::information(nullptr, QString::fromStdString( "Success"), QString::fromStdString( "Successfully Regsitered Student"));
+    grade ng = grade(0, 0, 0, sid, courseid);
+    QString gradesFile = "/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/grades.csv";
+
+    // Open grades.csv and verify conditions
+    QFile file(gradesFile);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        //QMessageBox::critical(this, "Error", "Failed to open grades.csv");
+        return;
+    }
+
+    QTextStream in(&file);
+    int sameStudentCount = 0;
+    bool recordExists = false;
+
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList fields = line.split(',');
+
+        if (fields.size() < 2)
+            continue; // Defensive check
+
+        QString existingStudent = fields[0].trimmed();
+        QString existingCourse = fields[1].trimmed();
+
+        if (existingStudent == QString::fromStdString(sid)) {
+            ++sameStudentCount;
+
+            if (existingCourse == QString::fromStdString(courseid)) {
+                recordExists = true;
+                break; // No need to check further
+            }
+        }
+    }
+    file.close();
+
+    // Handle violations
+    if (recordExists) {
+        ui->resultlabel->setText("Registration Failed. This student is already registered for this course.");
+
+        // QMessageBox::warning(this, "Registration Failed", "This student is already registered for this course.");
+        return;
+    }
+    if (sameStudentCount >= 3) {
+        ui->resultlabel->setText("Registration Failed. A student cannot register for more than 3 courses.");
+        // QMessageBox::warning(this, "Registration Failed", "A student cannot register for more than 3 courses.");
+        return;
+    }
+
+    // Proceed with registration
     QStringList newRow;
-    newRow << QString::fromStdString( ng.getStudent()) << QString::fromStdString( ng.getCourse() )<< QString::fromStdString(to_string( ng.getMid1())) << QString::fromStdString(to_string(ng.getMid2())) << QString::fromStdString(to_string(ng.getFinal()));
-    bappendRowToCsv("/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/grades.csv", newRow);
+    newRow << QString::fromStdString(ng.getStudent())
+           << QString::fromStdString(ng.getCourse())
+           << QString::fromStdString(std::to_string(ng.getMid1()))
+           << QString::fromStdString(std::to_string(ng.getMid2()))
+           << QString::fromStdString(std::to_string(ng.getFinal()));
+
+    bappendRowToCsv(gradesFile, newRow);
+    ui->resultlabel->setText("SUCCESS!");
+
+    this->hide();
+
+    //QMessageBox::information(this, "Success", "Student registered successfully.");
 }
+
 

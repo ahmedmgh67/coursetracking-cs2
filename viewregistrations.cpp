@@ -10,6 +10,8 @@
 #include <QStandardItem>
 #include <iostream>
 #include<cstring>
+
+
 using namespace  std;
 
 string agetIdFromName(const QString& filePath, string name) {
@@ -74,8 +76,24 @@ void baloadCsvToTableView(const QString& filePath, QTableView* tableView, string
                 if(fields[0].toStdString()==val){
                     QList<QStandardItem*> items;
                     for (const QString& field : fields) {
+                        // if(field.startsWith("S")){
+                        //     items.append(new QStandardItem( QString::fromStdString( (student::getById(field.toStdString()).getName() )  ) ));
+                        //     continue;
+
+                        // }
+                        // if (field.startsWith("C")){
+                        //     items.append(new QStandardItem( QString::fromStdString( (course::getById(field.toStdString()).getName() )  ) ));
+                        //     continue;
+                        // }
                         items.append(new QStandardItem(field));
                     }
+                    // items.append(new QStandardItem( QString::fromStdString( (student::getById(fields[1].toStdString()).getName() )  ) ));
+                    // items.append(new QStandardItem( QString::fromStdString( (course::getById(fields[0].toStdString()).getName() )  ) ));
+                    // items.append(new QStandardItem(  fields[2] ));
+                    // items.append(new QStandardItem(  fields[3] ));
+                    // items.append(new QStandardItem(  fields[4] ));
+
+
                     items.append(new QStandardItem (QString::fromStdString(to_string(fields[2].toDouble()+fields[3].toDouble()+fields[4].toDouble()))));
                     model->appendRow(items);
                 }
@@ -125,7 +143,7 @@ void ViewRegistrations::on_table_clicked(const QModelIndex &index)
     QString sid = index.model()->index(row, 0).data().toString();
     QString cid = index.model()->index(row, 1).data().toString();
 
-    edw = new EditGrades(nullptr, sid, cid);
+    edw = new EditGrades(this, sid, cid);
     edw->show();
 
 }

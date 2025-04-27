@@ -13,7 +13,7 @@ public:
     string getName();
 
     string getID();
-    student getById(string name);
+    static student getById(string name);
 };
 
 #endif // STUDENT_H

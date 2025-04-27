@@ -63,7 +63,10 @@ void EditGrades::on_pushButton_clicked()
 
     QList<QLineEdit*> lineEdits;
     lineEdits<<ui->lineEdit <<  ui->lineEdit_2 << ui->lineEdit_3;
-
+    if((lineEdits[0]->text().toDouble()>30) || (lineEdits[1]->text().toDouble()>30) || (lineEdits[2]->text().toDouble()>40)){
+        ui->resultlabel->setText("Maximum for Midterms is 30 and for final is 40.");
+        return;
+    }
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList fields = line.split(',');
@@ -71,6 +74,7 @@ void EditGrades::on_pushButton_clicked()
         if (!updated && (fields.contains(cid)&&fields.contains(sid))) {
             QStringList newFields;
             newFields<<sid<<cid;
+
             for (QLineEdit* edit : lineEdits) {
                 newFields << edit->text();
             }
@@ -98,5 +102,15 @@ void EditGrades::on_pushButton_clicked()
     }
 
     file.close();
+    QWidget* parent1 = this->parentWidget();
+    if (parent1) {
+        QWidget* parent2 = parent1->parentWidget();
+        if (parent2) {
+            parent2->close();
+        }
+        parent1->close();
+    }
+    this->close();
+
 }
 

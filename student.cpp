@@ -11,7 +11,7 @@ string student::getID(){return id;}
 
 
 student student::getById(string name){
-    QFile file("filePath");
+    QFile file("/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/students.csv");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning("Could not open file");
         return student();
@@ -27,7 +27,11 @@ student student::getById(string name){
         QString line = in.readLine();
         QStringList fields = line.split(',');
         if (!fields.isEmpty()) {
+            if(fields[1].toStdString()==name){
+
+
             return student(fields[0].toStdString(), fields[1].toStdString());
+            }
         }
     }
 

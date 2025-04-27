@@ -70,7 +70,7 @@ ViewStudents::~ViewStudents()
 }
 
 void ViewStudents::goToRegistrations(string row){
-    vrw = new ViewRegistrations(nullptr, row);
+    vrw = new ViewRegistrations(this, row);
     vrw->show();
 
 }

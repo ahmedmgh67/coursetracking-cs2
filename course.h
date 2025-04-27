@@ -19,7 +19,7 @@ public:
     string getStartTime();
 
     string getDay();
-    course getById(string);
+    static course getById(string);
 };
 
 #endif // COURSE_H

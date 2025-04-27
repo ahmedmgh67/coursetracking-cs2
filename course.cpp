@@ -14,7 +14,7 @@ string course::getStartTime(){return startTime;}
 string course::getDay(){return day;}
 
 course course::getById(string name){
-            QFile file("filePath");
+            QFile file("/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/courses.csv");
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             qWarning("Could not open file");
             return course();
@@ -30,7 +30,11 @@ course course::getById(string name){
             QString line = in.readLine();
             QStringList fields = line.split(',');
             if (!fields.isEmpty()) {
+                if(fields[1]==name){
+
+
                 return course(fields[0].toStdString(), fields[1].toStdString(), fields[2].toStdString(), fields[3].toStdString());
+                }
             }
         }
 
