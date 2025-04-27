@@ -9,16 +9,40 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    course.cpp \
+    grade.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    registerdialog.cpp \
+    scandre.cpp \
+    student.cpp \
+    viewcourses.cpp \
+    viewregistrations.cpp \
+    viewstudents.cpp
 
 HEADERS += \
-    mainwindow.h
+    course.h \
+    grade.h \
+    mainwindow.h \
+    registerdialog.h \
+    scandre.h \
+    student.h \
+    viewcourses.h \
+    viewregistrations.h \
+    viewstudents.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    registerdialog.ui \
+    scandre.ui \
+    viewcourses.ui \
+    viewregistrations.ui \
+    viewstudents.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    qrc.qrc
