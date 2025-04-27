@@ -11,56 +11,19 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Course Tracker</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="verticalLayoutWidget">
+   <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>119</x>
-      <y>59</y>
-      <width>668</width>
-      <height>381</height>
+      <x>49</x>
+      <y>29</y>
+      <width>721</width>
+      <height>401</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="viewSButton">
-         <property name="text">
-          <string>View All Students</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="viewCButton">
-         <property name="text">
-          <string>View All Courses</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <item>
-        <widget class="QPushButton" name="registerButton">
-         <property name="text">
-          <string>Register Student to Course</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="viewRButtton">
-         <property name="text">
-          <string>Schedule and Reports</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
+    <layout class="QGridLayout" name="gridLayout"/>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -72,6 +35,12 @@
      <height>37</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuCourse_Tracker">
+    <property name="title">
+     <string>Course Tracker</string>
+    </property>
+   </widget>
+   <addaction name="menuCourse_Tracker"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

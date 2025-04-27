@@ -78,10 +78,10 @@ void EditGrades::on_pushButton_clicked()
             for (QLineEdit* edit : lineEdits) {
                 newFields << edit->text();
             }
-            lines.append(newFields.join(',')); // New edited line
+            lines.append(newFields.join(','));
             updated = true;
         } else {
-            lines.append(line); // Keep existing line
+            lines.append(line);
         }
     }
 

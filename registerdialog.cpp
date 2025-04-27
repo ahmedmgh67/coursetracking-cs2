@@ -87,10 +87,8 @@ bool bappendRowToCsv(const QString& filePath, const QStringList& rowData) {
 
     QTextStream out(&file);
 
-    // Join the rowData list into a comma-separated string
     QString line = rowData.join(',');
 
-    // Append a newline and the data
     out  << line<<"\n";
 
     file.close();
@@ -104,10 +102,8 @@ void registerDialog::on_registerButton_clicked()
     grade ng = grade(0, 0, 0, sid, courseid);
     QString gradesFile = "/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/grades.csv";
 
-    // Open grades.csv and verify conditions
     QFile file(gradesFile);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        //QMessageBox::critical(this, "Error", "Failed to open grades.csv");
         return;
     }
 
@@ -120,7 +116,7 @@ void registerDialog::on_registerButton_clicked()
         QStringList fields = line.split(',');
 
         if (fields.size() < 2)
-            continue; // Defensive check
+            continue;
 
         QString existingStudent = fields[0].trimmed();
         QString existingCourse = fields[1].trimmed();
@@ -130,26 +126,22 @@ void registerDialog::on_registerButton_clicked()
 
             if (existingCourse == QString::fromStdString(courseid)) {
                 recordExists = true;
-                break; // No need to check further
+                break;
             }
         }
     }
     file.close();
 
-    // Handle violations
     if (recordExists) {
         ui->resultlabel->setText("Registration Failed. This student is already registered for this course.");
 
-        // QMessageBox::warning(this, "Registration Failed", "This student is already registered for this course.");
         return;
     }
     if (sameStudentCount >= 3) {
         ui->resultlabel->setText("Registration Failed. A student cannot register for more than 3 courses.");
-        // QMessageBox::warning(this, "Registration Failed", "A student cannot register for more than 3 courses.");
         return;
     }
 
-    // Proceed with registration
     QStringList newRow;
     newRow << QString::fromStdString(ng.getStudent())
            << QString::fromStdString(ng.getCourse())
@@ -162,7 +154,6 @@ void registerDialog::on_registerButton_clicked()
 
     this->hide();
 
-    //QMessageBox::information(this, "Success", "Student registered successfully.");
 }
 
 

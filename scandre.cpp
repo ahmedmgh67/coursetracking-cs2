@@ -101,8 +101,14 @@ void loadTimetableView(const QString& filePath, QTableView* tableView) {
         int row = timeRow.value(time, -1);
 
         if (row != -1 && col != -1) {
-            QStandardItem* item = new QStandardItem(course);
-            model->setItem(row, col, item);
+            QStandardItem* existingItem = model->item(row, col);
+            if (existingItem) {
+                QString existingText = existingItem->text();
+                existingItem->setText(existingText + " & " + course);
+            } else {
+                QStandardItem* newItem = new QStandardItem(course);
+                model->setItem(row, col, newItem);
+            }
         }
     }
 

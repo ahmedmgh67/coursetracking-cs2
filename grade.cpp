@@ -24,17 +24,15 @@ string grade::getCourse(){return course;}
 
 bool appendRowToCsv(const QString& filePath, const QStringList& rowData) {
     QFile file(filePath);
-    if (!file.open(QIODevice::Append | QIODevice::Text)) { // Open in append mode
+    if (!file.open(QIODevice::Append | QIODevice::Text)) {
         qWarning("Could not open file for appending");
         return false;
     }
 
     QTextStream out(&file);
 
-    // Join the rowData list into a comma-separated string
     QString line = rowData.join(',');
 
-    // Append a newline and the data
     out << "\n" << line;
 
     file.close();
