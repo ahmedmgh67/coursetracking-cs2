@@ -17,8 +17,6 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
-
-
 void loadTimetableView(const QString& filePath, QTableView* tableView) {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -73,10 +71,10 @@ void loadTimetableView(const QString& filePath, QTableView* tableView) {
     }
     file.close();
 
-    // Custom day order starting from Sunday
+
     QStringList weekOrder = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
 
-    // Sort days according to weekOrder
+
     QStringList sortedDays;
     for (const QString& day : weekOrder) {
         if (uniqueDays.contains(day)) {
@@ -85,7 +83,7 @@ void loadTimetableView(const QString& filePath, QTableView* tableView) {
     }
 
     QStringList sortedTimes = uniqueTimes.values();
-    sortedTimes.sort(); // normal time sorting
+    sortedTimes.sort();
 
     QStandardItemModel* model = new QStandardItemModel(tableView);
     model->setHorizontalHeaderLabels(sortedDays);
@@ -148,7 +146,7 @@ void aloadCsvToComboBox(const QString& filePath, QComboBox* comboBox) {
         QString line = in.readLine();
         QStringList fields = line.split(',');
         if (!fields.isEmpty()) {
-            comboBox->addItem(fields[0], QVariant(fields[1])); // adjust index based on needed column
+            comboBox->addItem(fields[0], QVariant(fields[1]));
         }
     }
 
@@ -158,13 +156,7 @@ void aloadCsvToComboBox(const QString& filePath, QComboBox* comboBox) {
 
 
 
-#include <QMap>
-#include <QString>
-#include <QFile>
-#include <QTextStream>
-#include <QDebug>
 
-// Helper: Get course ID from course name
 QString getCourseId(const QString& courseName, const QString& coursesFilePath) {
     QFile file(coursesFilePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -182,7 +174,6 @@ QString getCourseId(const QString& courseName, const QString& coursesFilePath) {
     return "";
 }
 
-// Helper: Get student name from student ID
 QString getStudentName(const QString& studentId, const QString& studentsFilePath) {
     QFile file(studentsFilePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -213,7 +204,7 @@ QMap<QString, QList<double>> getStudentsGradesForCourse(const QString& courseNam
     QString courseId = getCourseId(courseName, coursesFilePath);
     if (courseId.isEmpty()) {
         qWarning() << "Course not found.";
-        //return studentsGrades;
+
     }
 
     QFile file(gradesFilePath);
@@ -267,7 +258,7 @@ QString getStudentId(const QString& studentName, const QString& studentsFilePath
     return "";
 }
 
-// Helper: Get course name from course ID
+
 QString getCourseName(const QString& courseId, const QString& coursesFilePath) {
     QFile file(coursesFilePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -297,7 +288,7 @@ QMap<QString, QList<double>> getCoursesGradesForStudent(const QString& studentNa
     QString studentId = getStudentId(studentName, studentsFilePath);
     if (studentId.isEmpty()) {
         qWarning() << "Student not found.";
-        //return coursesGrades;
+
     }
 
     QFile file(gradesFilePath);

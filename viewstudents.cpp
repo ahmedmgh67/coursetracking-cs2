@@ -20,7 +20,7 @@ void loadCsvToTableView(const QString& filePath, QTableView* tableView) {
         return;
     }
 
-    QStandardItemModel* model = new QStandardItemModel(tableView); // Parent is tableView
+    QStandardItemModel* model = new QStandardItemModel(tableView);
     QTextStream in(&file);
 
     bool isFirstLine = true;
@@ -30,7 +30,6 @@ void loadCsvToTableView(const QString& filePath, QTableView* tableView) {
         QStringList fields = line.split(',');
 
         if (isFirstLine) {
-            // Set headers from first line
             model->setHorizontalHeaderLabels(fields);
             isFirstLine = false;
         } else {
