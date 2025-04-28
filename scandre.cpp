@@ -73,10 +73,19 @@ void loadTimetableView(const QString& filePath, QTableView* tableView) {
     }
     file.close();
 
-    QStringList sortedDays = uniqueDays.values();
+    // Custom day order starting from Sunday
+    QStringList weekOrder = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+
+    // Sort days according to weekOrder
+    QStringList sortedDays;
+    for (const QString& day : weekOrder) {
+        if (uniqueDays.contains(day)) {
+            sortedDays.append(day);
+        }
+    }
+
     QStringList sortedTimes = uniqueTimes.values();
-    sortedDays.sort();
-    sortedTimes.sort();
+    sortedTimes.sort(); // normal time sorting
 
     QStandardItemModel* model = new QStandardItemModel(tableView);
     model->setHorizontalHeaderLabels(sortedDays);
@@ -105,20 +114,21 @@ void loadTimetableView(const QString& filePath, QTableView* tableView) {
 
         if (row != -1 && col != -1) {
             QStandardItem* existingItem = model->item(row, col);
+
             if (existingItem) {
                 QString existingText = existingItem->text();
                 existingItem->setText(existingText + " & " + course);
             } else {
                 QStandardItem* newItem = new QStandardItem(course);
+                newItem->setTextAlignment(Qt::AlignCenter);
                 model->setItem(row, col, newItem);
             }
         }
     }
 
     tableView->setModel(model);
+    tableView->resizeColumnsToContents();
 }
-
-
 
 
 void aloadCsvToComboBox(const QString& filePath, QComboBox* comboBox) {

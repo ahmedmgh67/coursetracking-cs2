@@ -58,10 +58,12 @@ void baloadCsvToTableView(const QString& filePath, QTableView* tableView, string
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList fields = line.split(',');
+        QStringList afields = {"Student ID", "Course ID", "Midterm 1", "Midterm 2", "Final", "Total"};
 
+        model->setHorizontalHeaderLabels(afields);
         if (isFirstLine) {
-            model->setHorizontalHeaderLabels(fields);
-            isFirstLine = false;
+            // model->setHorizontalHeaderLabels(fields);
+            // isFirstLine = false;
         } else {
             if(QString::fromStdString(val).startsWith("C")){
                 if(fields[1].toStdString()==val){

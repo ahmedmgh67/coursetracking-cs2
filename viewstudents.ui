@@ -6,34 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>291</width>
+    <height>536</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>View Students</string>
   </property>
   <widget class="QTableView" name="tableView">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>30</y>
-     <width>401</width>
-     <height>271</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
      <y>10</y>
-     <width>91</width>
-     <height>16</height>
+     <width>290</width>
+     <height>521</height>
     </rect>
-   </property>
-   <property name="text">
-    <string>View Students</string>
    </property>
   </widget>
  </widget>
