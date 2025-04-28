@@ -14,7 +14,7 @@
 using namespace std;
 
 void displayFullGradesInTableView(const QMap<QString, QList<double>>& map, QTableView* tableView) {
-    auto* model = new QStandardItemModel(map.size(), 4, tableView); // 4 columns: Name + 3 grades
+    auto* model = new QStandardItemModel(map.size(), 4, tableView);
     model->setHeaderData(0, Qt::Horizontal, "Student Name");
     model->setHeaderData(1, Qt::Horizontal, "Midterm 1");
     model->setHeaderData(2, Qt::Horizontal, "Midterm 2");
@@ -59,10 +59,10 @@ bool exportGradesToCSV(const QMap<QString, QList<double>>& gradesMap, const QStr
 
     QTextStream out(&file);
 
-    // Write header
+
     out << "Student Name,Midterm 1,Midterm 2,Final Exam, Total\n";
 
-    // Write data
+
     for (auto it = gradesMap.constBegin(); it != gradesMap.constEnd(); ++it) {
         out << "\"" << it.key() << "\","
             << QString::number(it.value().value(0), 'f', 2) << ","

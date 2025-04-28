@@ -10,10 +10,6 @@ EditGrades::EditGrades(QWidget *parent, QString said, QString caid)
 {
     ui->setupUi(this);
 
-    int found;
-
-
-
 
     QList<QLineEdit*> lineEdits;
     lineEdits<<ui->lineEdit <<  ui->lineEdit_2 << ui->lineEdit_3;
@@ -91,7 +87,6 @@ void EditGrades::on_pushButton_clicked()
         qWarning("No matching row found to update");
     }
 
-    // Now overwrite the file
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
         qWarning("Could not open CSV for writing");
     }

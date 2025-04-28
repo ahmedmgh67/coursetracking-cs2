@@ -23,12 +23,12 @@ string agetIdFromName(const QString& filePath, string name) {
 
     QTextStream in(&file);
 
-    // Skip the header line
+
     if (!in.atEnd()) {
         in.readLine();
     }
 
-    // Now read the actual data
+
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList fields = line.split(',');
@@ -50,7 +50,7 @@ void baloadCsvToTableView(const QString& filePath, QTableView* tableView, string
         return;
     }
 
-    QStandardItemModel* model = new QStandardItemModel(tableView); // Parent is tableView
+    QStandardItemModel* model = new QStandardItemModel(tableView);
     QTextStream in(&file);
 
     bool isFirstLine = false;
@@ -62,8 +62,6 @@ void baloadCsvToTableView(const QString& filePath, QTableView* tableView, string
 
         model->setHorizontalHeaderLabels(afields);
         if (isFirstLine) {
-            // model->setHorizontalHeaderLabels(fields);
-            // isFirstLine = false;
         } else {
             if(QString::fromStdString(val).startsWith("C")){
                 if(fields[1].toStdString()==val){
@@ -142,7 +140,6 @@ void ViewRegistrations::on_table_clicked(const QModelIndex &index)
 
     int row = index.row();
 
-    // Example: Print the first column value of the clicked row
     QString sid = index.model()->index(row, 0).data().toString();
     QString cid = index.model()->index(row, 1).data().toString();
 

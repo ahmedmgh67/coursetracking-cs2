@@ -12,11 +12,6 @@
 #include <QWidget>
 #include <QIcon>
 
-void setupGridButtons(QMainWindow* mainWindow) {
-
-}
-
-
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -25,27 +20,26 @@ MainWindow::MainWindow(QWidget *parent)
 {
     QMainWindow* mainWindow = this;
     QPushButton* button1 = new QPushButton(QIcon(":/images/icon1.png"), "View Students");
-    QPushButton* button2 = new QPushButton(QIcon(":/images/icon2.png"), "View Grades");
+    QPushButton* button2 = new QPushButton(QIcon(":/images/icon2.png"), "View Courses");
     QPushButton* button3 = new QPushButton(QIcon(":/images/icon3.png"), "Register Student to Course");
     QPushButton* button4 = new QPushButton(QIcon(":/images/icon4.png"), "Schedule and Reports");
 
-    QSize iconSize(32, 32); // Icon size
+    QSize iconSize(32, 32);
     button1->setIconSize(iconSize);
     button2->setIconSize(iconSize);
     button3->setIconSize(iconSize);
     button4->setIconSize(iconSize);
 
-    // Create grid layout
     QGridLayout* gridLayout = new QGridLayout;
     gridLayout->addWidget(button1, 0, 0);
     gridLayout->addWidget(button2, 0, 1);
     gridLayout->addWidget(button3, 1, 0);
     gridLayout->addWidget(button4, 1, 1);
 
-    // Main vertical layout
+
     QVBoxLayout* mainLayout = new QVBoxLayout;
 
-    // Add a title label
+
     QLabel* titleLabel = new QLabel("Course Tracker App");
     titleLabel->setAlignment(Qt::AlignCenter);
     titleLabel->setStyleSheet("font-size: 32px; font-weight: bold; padding: 20px;");
@@ -57,21 +51,21 @@ MainWindow::MainWindow(QWidget *parent)
     mainLayout->addWidget(subtitleLabel);
     mainLayout->addLayout(gridLayout);
 
-    // Central widget
+
     QWidget* centralWidget = new QWidget;
     centralWidget->setLayout(mainLayout);
     mainWindow->setCentralWidget(centralWidget);
 
-    // Set window minimum size
+
     mainWindow->setMinimumSize(800, 600);
 
     centralWidget->setLayout(gridLayout);
     mainWindow->setCentralWidget(centralWidget);
 
-    // Set window minimum size
+
     mainWindow->setMinimumSize(800, 600);
 
-    // Apply style
+
     mainWindow->setStyleSheet(R"(
         QMainWindow {
             background-color: #f0f2f5;

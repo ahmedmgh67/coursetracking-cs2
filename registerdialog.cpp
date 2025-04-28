@@ -25,7 +25,7 @@ void loadCsvToComboBox(const QString& filePath, QComboBox* comboBox) {
         QString line = in.readLine();
         QStringList fields = line.split(',');
         if (!fields.isEmpty()) {
-            comboBox->addItem(fields[0], QVariant(fields[1])); // adjust index based on needed column
+            comboBox->addItem(fields[0], QVariant(fields[1]));
         }
     }
 
@@ -40,12 +40,12 @@ string getIdFromName(const QString& filePath, string name) {
 
     QTextStream in(&file);
 
-    // Skip the header line
+
     if (!in.atEnd()) {
         in.readLine();
     }
 
-    // Now read the actual data
+
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList fields = line.split(',');
@@ -78,7 +78,7 @@ registerDialog::~registerDialog()
 
 bool bappendRowToCsv(const QString& filePath, const QStringList& rowData) {
     QFile file(filePath);
-    if (!file.open(QIODevice::Append | QIODevice::Text)) { // Open in append mode
+    if (!file.open(QIODevice::Append | QIODevice::Text)) {
         qWarning("Could not open file for appending");
         return false;
     }
@@ -101,7 +101,7 @@ void registerDialog::on_registerButton_clicked()
     QString gradesFile = "/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/grades.csv";
     QString coursesFile = "/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/courses.csv";
 
-    // First, get the new course's Day and Time
+
     QString newCourseDay, newCourseTime;
     {
         QFile courseFile(coursesFile);
@@ -144,11 +144,10 @@ void registerDialog::on_registerButton_clicked()
         return;
     }
 
-    // Now, verify grades
+
     QFile file(gradesFile);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         ui->resultlabel->setText("Error: Cannot open grades file.");
-        //return;
     }
 
     QTextStream in(&file);
@@ -174,8 +173,6 @@ void registerDialog::on_registerButton_clicked()
                 break;
             }
 
-            // Check schedule conflict
-            // Lookup this existing course's day and time
             QFile courseFile(coursesFile);
             if (courseFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 QTextStream courseIn(&courseFile);
@@ -222,7 +219,6 @@ void registerDialog::on_registerButton_clicked()
         return;
     }
 
-    // If all checks passed, register
     QStringList newRow;
     newRow << QString::fromStdString(ng.getStudent())
            << QString::fromStdString(ng.getCourse())
