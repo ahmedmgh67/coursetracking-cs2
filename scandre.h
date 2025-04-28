@@ -2,6 +2,7 @@
 #define SCANDRE_H
 
 #include <QDialog>
+#include <tableview.h>
 
 namespace Ui {
 class ScAndRe;
@@ -20,6 +21,7 @@ private slots:
 
 private:
     Ui::ScAndRe *ui;
+    TableView* tvw;
 };
 
 #endif // SCANDRE_H

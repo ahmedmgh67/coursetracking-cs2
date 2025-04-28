@@ -148,59 +148,64 @@ void aloadCsvToComboBox(const QString& filePath, QComboBox* comboBox) {
 
 
 
-// Helper function to map course name to course ID
+#include <QMap>
+#include <QString>
+#include <QFile>
+#include <QTextStream>
+#include <QDebug>
+
+// Helper: Get course ID from course name
 QString getCourseId(const QString& courseName, const QString& coursesFilePath) {
     QFile file(coursesFilePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Failed to open courses file.";
+        qWarning() << "Cannot open courses file.";
         return "";
     }
     QTextStream in(&file);
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList parts = line.split(',');
-        if (parts.size() >= 2 && parts[1].trimmed() == courseName) {
-            return parts[0].trimmed();
-        }
-    }
-    return "";
-}
-
-// Helper function to map student ID to student name
-QString getStudentName(const QString& studentId, const QString& studentsFilePath) {
-    QFile file(studentsFilePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Failed to open students file.";
-        return "";
-    }
-    QTextStream in(&file);
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        QStringList parts = line.split(',');
-        if (parts.size() >= 2 && parts[0].trimmed() == studentId) {
+        if ( parts[0].trimmed() == courseName) {
             return parts[1].trimmed();
         }
     }
     return "";
 }
 
-// Main function
-QMap<QString, double> getStudentsGradesForCourse(const QString& courseName,
-                                                 const QString& coursesFilePath,
-                                                 const QString& studentsFilePath,
-                                                 const QString& gradesFilePath)
+// Helper: Get student name from student ID
+QString getStudentName(const QString& studentId, const QString& studentsFilePath) {
+    QFile file(studentsFilePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Cannot open students file.";
+        return "";
+    }
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList parts = line.split(',');
+        if (parts[1].trimmed() == studentId) {
+            return parts[0].trimmed();
+        }
+    }
+    return "";
+}
+
+QMap<QString, QList<double>> getStudentsGradesForCourse(const QString& courseName,
+                                                        const QString& coursesFilePath,
+                                                        const QString& studentsFilePath,
+                                                        const QString& gradesFilePath)
 {
-    QMap<QString, double> studentsGrades;
+    QMap<QString, QList<double>> studentsGrades;
 
     QString courseId = getCourseId(courseName, coursesFilePath);
     if (courseId.isEmpty()) {
-        qDebug() << "Course not found.";
-        return studentsGrades;
+        qWarning() << "Course not found.";
+        //return studentsGrades;
     }
 
     QFile file(gradesFilePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Failed to open grades file.";
+        qWarning() << "Cannot open grades file.";
         return studentsGrades;
     }
 
@@ -209,13 +214,17 @@ QMap<QString, double> getStudentsGradesForCourse(const QString& courseName,
         QString line = in.readLine();
         QStringList parts = line.split(',');
         if (parts.size() >= 5) {
-            QString studentId = parts[3].trimmed();
-            QString gradeCourseId = parts[4].trimmed();
-            double totalGrade = parts[2].trimmed().toDouble();
+            QString studentId = parts[0].trimmed();
+            QString gradeCourseId = parts[1].trimmed();
+            double midterm1 = parts[2].trimmed().toDouble();
+            double midterm2 = parts[3].trimmed().toDouble();
+            double finalExam = parts[4].trimmed().toDouble();
+
             if (gradeCourseId == courseId) {
                 QString studentName = getStudentName(studentId, studentsFilePath);
                 if (!studentName.isEmpty()) {
-                    studentsGrades.insert(studentName, totalGrade);
+                    QList<double> grades = { midterm1, midterm2, finalExam };
+                    studentsGrades.insert(studentName, grades);
                 }
             }
         }
@@ -223,8 +232,6 @@ QMap<QString, double> getStudentsGradesForCourse(const QString& courseName,
 
     return studentsGrades;
 }
-
-
 ScAndRe::ScAndRe(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ScAndRe)
@@ -248,9 +255,13 @@ ScAndRe::~ScAndRe()
 
 void ScAndRe::on_genreco_clicked()
 {
-    QMap<QString, double> a =  getStudentsGradesForCourse(ui->comboBox->currentText(),
+    QMap<QString, QList<double>> a =  getStudentsGradesForCourse(ui->comboBox->currentText(),
                                                          "/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/courses.csv",
                                                          "/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/students.csv",
                                                          "/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/grades.csv");
+
+    tvw = new TableView(this, a);
+    tvw->show();
+
 }
 
