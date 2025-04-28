@@ -9,6 +9,8 @@
 #include <QTextStream>
 #include <QList>
 #include <QDebug>
+#include <quuid>
+#include <QDateTime>
 using namespace std;
 
 void displayFullGradesInTableView(const QMap<QString, QList<double>>& map, QTableView* tableView) {
@@ -72,8 +74,15 @@ bool exportGradesToCSV(const QMap<QString, QList<double>>& gradesMap, const QStr
     file.close();
     return true;
 }
+
+QString generateRandomFileName(const QString& extension = "csv") {
+    QString timestamp = QDateTime::currentDateTime().toString("yyyyMMdd_HHmmsszzz");
+    QString uuid = QUuid::createUuid().toString(QUuid::WithoutBraces).replace("-", "");
+    return QString("%1_%2.%3").arg(timestamp, uuid, extension);
+}
+
 void TableView::on_pushButton_clicked()
 {
-    exportGradesToCSV(thismap, "/Users/ahmedgamal/Downloads/report_.csv");
+    exportGradesToCSV(thismap, "/Users/ahmedgamal/Downloads/"+generateRandomFileName());
 }
 

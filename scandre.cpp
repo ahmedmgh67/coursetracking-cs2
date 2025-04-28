@@ -190,6 +190,9 @@ QString getStudentName(const QString& studentId, const QString& studentsFilePath
     return "";
 }
 
+
+
+
 QMap<QString, QList<double>> getStudentsGradesForCourse(const QString& courseName,
                                                         const QString& coursesFilePath,
                                                         const QString& studentsFilePath,
@@ -232,6 +235,101 @@ QMap<QString, QList<double>> getStudentsGradesForCourse(const QString& courseNam
 
     return studentsGrades;
 }
+
+
+
+
+
+QString getStudentId(const QString& studentName, const QString& studentsFilePath) {
+    QFile file(studentsFilePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Cannot open students file.";
+        return "";
+    }
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList parts = line.split(',');
+        if (parts[0].trimmed() == studentName) {
+            return parts[1].trimmed();
+        }
+    }
+    return "";
+}
+
+// Helper: Get course name from course ID
+QString getCourseName(const QString& courseId, const QString& coursesFilePath) {
+    QFile file(coursesFilePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Cannot open courses file.";
+        return "";
+    }
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList parts = line.split(',');
+        if (parts[1].trimmed() == courseId) {
+            return parts[0].trimmed();
+        }
+    }
+    return "";
+}
+
+
+
+QMap<QString, QList<double>> getCoursesGradesForStudent(const QString& studentName,
+                                                        const QString& studentsFilePath,
+                                                        const QString& coursesFilePath,
+                                                        const QString& gradesFilePath)
+{
+    QMap<QString, QList<double>> coursesGrades;
+
+    QString studentId = getStudentId(studentName, studentsFilePath);
+    if (studentId.isEmpty()) {
+        qWarning() << "Student not found.";
+        //return coursesGrades;
+    }
+
+    QFile file(gradesFilePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Cannot open grades file.";
+        return coursesGrades;
+    }
+
+    QTextStream in(&file);
+    double f =0;
+    int count=0;
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList parts = line.split(',');
+        if (parts.size() >= 5) {
+            QString gradeStudentId = parts[0].trimmed();
+            QString courseId = parts[1].trimmed();
+            double midterm1 = parts[2].trimmed().toDouble();
+            double midterm2 = parts[3].trimmed().toDouble();
+            double finalExam = parts[4].trimmed().toDouble();
+
+            if (gradeStudentId == studentId) {
+                QString courseName = getCourseName(courseId, coursesFilePath);
+                if (!courseName.isEmpty()) {
+                    QList<double> grades = { midterm1, midterm2, finalExam };
+                    coursesGrades.insert(courseName, grades);
+                    f+=finalExam;
+                    count++;
+                }
+            }
+        }
+    }
+    QList<double> agrades = {0,0,(f/count)};
+    coursesGrades.insert("Overall Average Grade", agrades);
+
+    return coursesGrades;
+}
+
+
+
+
+
 ScAndRe::ScAndRe(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ScAndRe)
@@ -263,5 +361,18 @@ void ScAndRe::on_genreco_clicked()
     tvw = new TableView(this, a);
     tvw->show();
 
+
+}
+
+
+void ScAndRe::on_genrest_clicked()
+{
+    QMap<QString, QList<double>> a =  getCoursesGradesForStudent(ui->comboBox_2->currentText(),
+                                                                "/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/students.csv",
+                                                                "/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/courses.csv",
+                                                                "/Users/ahmedgamal/UNI/CS2/coursetracking-cs2/grades.csv");
+
+    tvw = new TableView(this, a);
+    tvw->show();
 }
 

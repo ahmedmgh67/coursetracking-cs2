@@ -19,6 +19,8 @@ public:
 private slots:
     void on_genreco_clicked();
 
+    void on_genrest_clicked();
+
 private:
     Ui::ScAndRe *ui;
     TableView* tvw;
